@@ -22,7 +22,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     overflow-y: hidden;
-    background: var(--page);
+    background: radial-gradient(ellipse at 50% 0%, #111629 0%, #090b13 42%, #07080d 100%);
     color: var(--white);
     font: 14px/1.65 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -32,6 +32,32 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 ::selection { background: #fff; color: #080808; }
 :focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 
+.space-background {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+    background:
+        radial-gradient(1px 1px at 8% 17%, rgba(255,255,255,.82) 99%, transparent),
+        radial-gradient(1px 1px at 23% 68%, rgba(255,255,255,.55) 99%, transparent),
+        radial-gradient(1px 1px at 38% 29%, rgba(255,255,255,.72) 99%, transparent),
+        radial-gradient(1px 1px at 52% 82%, rgba(255,255,255,.5) 99%, transparent),
+        radial-gradient(1px 1px at 67% 12%, rgba(255,255,255,.78) 99%, transparent),
+        radial-gradient(1px 1px at 81% 54%, rgba(255,255,255,.58) 99%, transparent),
+        radial-gradient(1px 1px at 93% 32%, rgba(255,255,255,.7) 99%, transparent),
+        radial-gradient(1px 1px at 14% 91%, rgba(255,255,255,.45) 99%, transparent);
+}
+.shooting-star {
+    position: absolute; top: 8%; right: 12%; width: 110px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214,226,255,.8), transparent);
+    opacity: 0; transform: rotate(135deg);
+    animation: shooting-star 12s linear infinite;
+}
+.shooting-star:nth-child(2) { top: 36%; right: 38%; animation-delay: -4s; }
+.shooting-star:nth-child(3) { top: 14%; right: 67%; animation-delay: -8s; }
+@keyframes shooting-star {
+    0%, 72% { opacity: 0; transform: translate(0, 0) rotate(135deg); }
+    74% { opacity: .8; }
+    82% { opacity: 0; transform: translate(-300px, 300px) rotate(135deg); }
+    100% { opacity: 0; transform: translate(-300px, 300px) rotate(135deg); }
+}
 #bg-start-audio {
     position: fixed; inset: 0; z-index: 100000000; background: #000;
     display: flex; justify-content: center; align-items: center;
@@ -59,7 +85,7 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 #volume-slider::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: #fff; }
 .scroll-progress { position: fixed; inset: 0 0 auto; z-index: 1000; height: 2px; }
 .scroll-progress-bar { width: 0; height: 100%; background: #fff; transition: width .2s ease; }
-.app-container { min-height: 100vh; opacity: 0; transition: opacity .5s ease; }
+.app-container { position: relative; z-index: 1; min-height: 100vh; opacity: 0; transition: opacity .5s ease; }
 .app-container.animate-in { opacity: 1; }
 
 #listView { min-height: 100vh; }
@@ -69,7 +95,7 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
     align-items: center; justify-content: center; gap: 5px;
     margin: 20px auto 0; padding: 6px;
     border: 1px solid var(--line); border-radius: 8px;
-    background: #101010;
+    background: rgba(16,16,20,.78); backdrop-filter: blur(14px);
 }
 .panel-header { display: none; }
 .panel-item {
@@ -102,37 +128,12 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
     border: 0; border-radius: 0; background: transparent;
 }
 .about-section > .section-header { max-width: 960px; margin: 24px auto 18px; padding: 0 24px; }
-.about-banner {
-    position: relative; display: flex; width: 100%; min-height: clamp(300px, 48vw, 560px);
-    align-items: flex-end; justify-content: space-between; gap: 32px; overflow: hidden; padding: 7vw 9vw;
-    background: var(--page);
-}
-.about-banner-image, .about-banner-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
-.about-banner-image {
-    object-fit: cover;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
-    mask-composite: intersect;
-}
-.about-banner-shade {
-    background: linear-gradient(0deg, rgba(0,0,0,.2), transparent 70%);
-}
-.about-banner h1 { position: relative; z-index: 1; color: #fff; font-size: clamp(3.5rem, 11vw, 7.5rem); font-weight: 900; letter-spacing: -.02em; line-height: .95; transition: color .2s ease; }
-.about-banner[data-wordmark-tone="light"] h1 { color: #111; }
-.about-banner[data-info-tone="light"] .banner-info { color: #111; }
-.about-banner[data-info-tone="light"] .banner-info .subtitle { color: #111; }
-.about-banner[data-info-tone="light"] .banner-facts li { border-top-color: rgba(0,0,0,.22); }
-.about-banner[data-info-tone="light"] .banner-facts span { color: rgba(0,0,0,.72); }
-.banner-info {
-    position: relative; z-index: 1; width: min(330px, 42%); padding: 18px 0;
-    color: #fff;
-}
-.banner-info .subtitle { justify-content: flex-start; margin: 0 0 12px; color: #fff; font-size: 1rem; }
-.banner-facts { display: grid; gap: 7px; list-style: none; }
-.banner-facts li { display: flex; justify-content: space-between; gap: 12px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,.22); font-size: .85rem; }
-.banner-facts span { color: rgba(255,255,255,.78); }
-.banner-wordmark { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+.profile-intro { margin: 0 auto 34px; padding: 22px 18px 26px; text-align: center; }
+.profile-intro h1 { font-size: clamp(2.8rem, 8vw, 5rem); font-weight: 900; letter-spacing: -.04em; line-height: 1.08; }
+.profile-intro .subtitle { margin-top: 10px; font-size: 1.1rem; }
+.profile-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; list-style: none; }
+.profile-facts li { padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.035); color: #aaa; font-size: .78rem; }
+.profile-facts strong { margin-left: 5px; color: #eee; font-weight: 500; }
 .about-staff { width: min(100% - 48px, 1100px); margin: 0 auto 56px; padding: 0 12px; }
 .about-staff h2 { margin-bottom: 12px; font-size: 1.125rem; font-weight: 600; }
 #currentStaffGrid { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
@@ -189,7 +190,8 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 .server-card {
     position: relative; display: flex; min-height: 112px; flex-direction: column; align-items: center; justify-content: center;
     overflow: hidden; padding: 20px; border: 1px solid var(--line); border-radius: 8px;
-    background: #121212; color: inherit; text-align: center; text-decoration: none;
+    background: rgba(18,18,24,.78); color: inherit; text-align: center; text-decoration: none;
+    backdrop-filter: blur(10px);
     transition: border-color .2s ease, background .2s ease;
 }
 .server-card[data-href] { cursor: pointer; }
@@ -211,7 +213,8 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 .exp-list { display: flex; flex-direction: column; gap: 9px; }
 .exp-row {
     position: relative; display: flex; min-height: 72px; align-items: center; gap: 14px; overflow: hidden; padding: 13px 16px;
-    border: 1px solid var(--line); border-radius: 8px; background: #121212;
+    border: 1px solid var(--line); border-radius: 8px; background: rgba(18,18,24,.78);
+    backdrop-filter: blur(10px);
     cursor: pointer; transition: border-color .2s ease, background .2s ease;
 }
 .exp-row::before { position: absolute; inset: 0 0 auto; height: 2px; background: #fff; content: ''; transform: scaleX(0); transition: transform .3s ease; }
@@ -256,8 +259,7 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
     .section { padding: 25px 18px; border-radius: 10px; }
     .about-section { width: calc(100% + 28px); margin-left: 0; padding: 0; }
     .about-section > .section-header { margin: 16px auto; padding: 0 14px; }
-    .about-banner { min-height: 390px; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 20px; padding: 30px 8vw; }
-    .banner-info { width: min(320px, 100%); padding: 12px 0; }
+    .profile-intro { margin-bottom: 24px; padding: 18px 8px 22px; }
     .about-content { gap: 20px; width: calc(100% - 36px); padding: 20px 0; }
     .about-staff { width: calc(100% - 36px); margin-bottom: 42px; padding: 0 8px; }
     .contact-grid { grid-template-columns: 1fr; }
@@ -273,11 +275,19 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
     #volume-control { top: auto; right: 14px; bottom: 14px; }
     #detailView { padding: 24px 14px 60px; }
 }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
+    .shooting-star { display: none; }
+}
 </style>
 </head>
 
 <body>
+<div class="space-background" aria-hidden="true">
+    <span class="shooting-star"></span>
+    <span class="shooting-star"></span>
+    <span class="shooting-star"></span>
+</div>
 <div id="bg-start-audio"><h1>Click Anywhere</h1></div>
 
 <audio id="bg-music" loop>
@@ -317,19 +327,14 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
         <div class="main-content">
             <section class="section page about-section show" id="about" data-page="about">
                 <div class="section-header"><i class="fa-solid fa-user"></i><span>About</span></div>
-                <div class="about-banner" id="aboutBanner">
-                    <div class="about-banner-shade"></div>
-                    <div class="banner-wordmark">
-                        <h1 id="aboutBannerName"></h1>
-                    </div>
-                    <div class="banner-info">
-                        <p class="subtitle" id="profileSubtitle"></p>
-                        <ul class="banner-facts">
-                            <li><span>Age</span><strong>15 y/o</strong></li>
-                            <li><span>Time Zone</span><strong>GMT+1</strong></li>
-                        </ul>
-                    </div>
-                </div>
+                <header class="profile-intro">
+                    <h1 id="profileName"></h1>
+                    <p class="subtitle" id="profileSubtitle"></p>
+                    <ul class="profile-facts">
+                        <li>Age<strong>15 y/o</strong></li>
+                        <li>Time Zone<strong>GMT+1</strong></li>
+                    </ul>
+                </header>
                 <div class="about-content" id="aboutContent"></div>
                 <section class="about-staff" aria-labelledby="currentStaffHeading">
                     <h2 id="currentStaffHeading">Current Staff</h2>
@@ -362,7 +367,6 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 /* =====================================================================
    CONFIG — edit everything here.
    Optional currentStaff logo: add `logo: "staff.png"` or an Imgur link to a staff item.
-   About banner: set `about.banner` to an Imgur link or image path such as "assets/banner.jpg".
    About content: add text blocks { type: "text", heading: "Title", text: "..." }
    and image blocks { type: "image", src: "photo.jpg", alt: "Description", caption: "..." }.
    Local images should be placed in the `assets` folder next to this HTML file.
@@ -375,7 +379,6 @@ svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width
 const CONFIG = {
     profile: { name: "dh3j", subtitle: "Student & Screenshare" },
     about: {
-        banner: "assets/banner.jpg",
         content: []
     },
     currentStaff: [
@@ -488,6 +491,7 @@ function imgurId(url) {
 
 /* ---------- bio ---------- */
 function initializeProfile() {
+    $('#profileName').textContent = CONFIG.profile.name;
     $('#profileSubtitle').innerHTML = `<i class="fa-solid fa-magnifying-glass" style="transform: scaleX(-1);"></i> ${esc(CONFIG.profile.subtitle)}`;
 }
 
@@ -540,97 +544,13 @@ function buildCards(container, items) {
 
 function buildAbout() {
     const about = CONFIG.about || {};
-    const banner = $('#aboutBanner');
-    $('#aboutBannerName').textContent = CONFIG.profile.name;
-    banner.dataset.wordmarkTone = 'dark';
-    banner.dataset.infoTone = 'dark';
-    banner.querySelector('.about-banner-image')?.remove();
-    if (about.banner) {
-        const bannerId = imgurId(about.banner);
-        const bannerSource = bannerId ? `https://i.imgur.com/${bannerId}.png` : about.banner;
-        const image = document.createElement('img');
-        image.className = 'about-banner-image';
-        image.alt = '';
-        image.addEventListener('load', () => {
-            try {
-                const canvas = document.createElement('canvas');
-                canvas.width = 32;
-                canvas.height = 32;
-                const context = canvas.getContext('2d', { willReadFrequently: true });
-                if (!context) throw new Error('Canvas 2D context is unavailable.');
-                const imageRatio = image.naturalWidth / image.naturalHeight;
-                const bannerBox = banner.getBoundingClientRect();
-                const bannerRatio = bannerBox.width / bannerBox.height;
-                let sourceX = 0;
-                let sourceY = 0;
-                let sourceWidth = image.naturalWidth;
-                let sourceHeight = image.naturalHeight;
-                if (imageRatio > bannerRatio) {
-                    sourceWidth = image.naturalHeight * bannerRatio;
-                    sourceX = (image.naturalWidth - sourceWidth) / 2;
-                } else {
-                    sourceHeight = image.naturalWidth / bannerRatio;
-                    sourceY = (image.naturalHeight - sourceHeight) / 2;
-                }
-                context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height);
-                const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-                const toneFor = element => {
-                    const rect = element.getBoundingClientRect();
-                    const left = Math.max(0, Math.floor((rect.left - bannerBox.left) / bannerBox.width * canvas.width));
-                    const right = Math.min(canvas.width, Math.ceil((rect.right - bannerBox.left) / bannerBox.width * canvas.width));
-                    const top = Math.max(0, Math.floor((rect.top - bannerBox.top) / bannerBox.height * canvas.height));
-                    const bottom = Math.min(canvas.height, Math.ceil((rect.bottom - bannerBox.top) / bannerBox.height * canvas.height));
-                    let luminance = 0;
-                    let count = 0;
-                    for (let y = top; y < bottom; y++) {
-                        for (let x = left; x < right; x++) {
-                            const index = (y * canvas.width + x) * 4;
-                            const imageLuminance = (0.2126 * pixels[index] + 0.7152 * pixels[index + 1] + 0.0722 * pixels[index + 2]) / 255;
-                            const horizontalEdge = Math.min((x + 0.5) / canvas.width, (canvas.width - x - 0.5) / canvas.width);
-                            const verticalEdge = Math.min((y + 0.5) / canvas.height, (canvas.height - y - 0.5) / canvas.height);
-                            const maskOpacity = Math.min(1, horizontalEdge / 0.14) * Math.min(1, verticalEdge / 0.14);
-                            luminance += imageLuminance * maskOpacity * 0.92 + (8 / 255) * (1 - maskOpacity);
-                            count++;
-                        }
-                    }
-                    return count && luminance / count > 0.45 ? 'light' : 'dark';
-                };
-                banner.dataset.wordmarkTone = toneFor($('#aboutBannerName'));
-                banner.dataset.infoTone = toneFor(banner.querySelector('.banner-info'));
-            } catch (error) {
-                banner.dataset.wordmarkTone = 'dark';
-                banner.dataset.infoTone = 'dark';
-                console.warn('Could not detect banner brightness; using white banner text.', error);
-            }
-        }, { once: true });
-        const bannerSources = bannerId ? [bannerSource] : [
-            bannerSource,
-            bannerSource.replace(/^\.\/assets\//, './assests/'),
-            bannerSource.replace(/^\.\/assests\//, './assets/'),
-            bannerSource.replace(/^assets\//, 'assests/'),
-            bannerSource.replace(/^assests\//, 'assets/')
-        ].filter((source, index, sources) => sources.indexOf(source) === index);
-        let bannerSourceIndex = 0;
-        image.addEventListener('error', () => {
-            bannerSourceIndex++;
-            if (bannerSourceIndex < bannerSources.length) {
-                image.src = bannerSources[bannerSourceIndex];
-                return;
-            }
-            console.warn(`Could not load About banner image: ${about.banner}`);
-            image.remove();
-        });
-        banner.prepend(image);
-        image.src = bannerSources[0];
-    }
-
     const content = $('#aboutContent');
     content.replaceChildren();
     const blocks = Array.isArray(about.content) ? about.content : [];
     if (!blocks.length) {
         const empty = document.createElement('p');
         empty.className = 'about-empty';
-        empty.textContent = 'Im dh3j, a student and aspiring DFIR specialist. I help with screenshares and basic forensic checks in small Minecraft communities,i verify players, review evidence and keep communities fair, im always working to get better.';
+        empty.textContent = 'Add text or image blocks in CONFIG.about.content to fill out your About page.';
         content.appendChild(empty);
         return;
     }
@@ -839,3 +759,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
